@@ -20,6 +20,19 @@ const Encyclopedia: React.FC<EncyclopediaProps> = ({ initialQuery, clearInitialQ
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+
+  // Load search history from local storage on component mount
+  useEffect(() => {
+    try {
+      const savedHistory = localStorage.getItem('botanica-encyclopedia-history');
+      if (savedHistory) {
+        setSearchHistory(JSON.parse(savedHistory));
+      }
+    } catch (e) {
+      console.error("Failed to load search history", e);
+    }
+  }, []);
 
   const executeSearch = async (searchQuery: string) => {
     if (!searchQuery) return;
@@ -30,6 +43,23 @@ const Encyclopedia: React.FC<EncyclopediaProps> = ({ initialQuery, clearInitialQ
     try {
       const info: SearchResult = await geminiService.getEncyclopediaInfo(searchQuery);
       setResult(info);
+      
+      // Update history on successful search
+      setSearchHistory(prevHistory => {
+        const lowerCaseQuery = searchQuery.toLowerCase();
+        const updatedHistory = [
+          searchQuery,
+          ...prevHistory.filter(item => item.toLowerCase() !== lowerCaseQuery)
+        ].slice(0, 10); // Limit to 10 recent searches
+
+        try {
+          localStorage.setItem('botanica-encyclopedia-history', JSON.stringify(updatedHistory));
+        } catch (e) {
+          console.error("Failed to save search history", e);
+        }
+        return updatedHistory;
+      });
+
       setIsLoading(false); // Stop main loading
       
       // Start image loading
@@ -59,7 +89,21 @@ const Encyclopedia: React.FC<EncyclopediaProps> = ({ initialQuery, clearInitialQ
     e.preventDefault();
     executeSearch(query);
   };
+
+  const handleHistoryClick = (historyQuery: string) => {
+    setQuery(historyQuery);
+    executeSearch(historyQuery);
+  };
   
+  const clearHistory = () => {
+    setSearchHistory([]);
+    try {
+      localStorage.removeItem('botanica-encyclopedia-history');
+    } catch (e) {
+      console.error("Failed to clear search history", e);
+    }
+  };
+
   const renderMarkdown = (text: string) => {
     return text.split('\n').map((line, index) => {
       if (line.startsWith('### ')) {
@@ -81,18 +125,46 @@ const Encyclopedia: React.FC<EncyclopediaProps> = ({ initialQuery, clearInitialQ
   return (
     <div className="p-4 space-y-6">
       <h2 className="text-3xl font-bold text-brand-brown">Botanical Encyclopedia</h2>
-      <form onSubmit={handleFormSubmit} className="flex gap-2">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="e.g., 'Rose stem' or 'Photosynthesis'"
-          className="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light-green"
-        />
-        <button type="submit" disabled={isLoading} className="bg-brand-green text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-light-green transition-colors disabled:bg-gray-400">
-          {isLoading ? '...' : 'Search'}
-        </button>
-      </form>
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <form onSubmit={handleFormSubmit} className="flex gap-2">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="e.g., 'Rose stem' or 'Photosynthesis'"
+            className="flex-grow px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-light-green"
+          />
+          <button type="submit" disabled={isLoading} className="bg-brand-green text-white font-bold py-2 px-4 rounded-lg hover:bg-brand-light-green transition-colors disabled:bg-gray-400">
+            {isLoading ? '...' : 'Search'}
+          </button>
+        </form>
+
+        {searchHistory.length > 0 && (
+          <div className="mt-4 border-t pt-4">
+            <div className="flex justify-between items-center mb-2">
+                <h4 className="text-sm font-semibold text-brand-brown">Recent Searches</h4>
+                <button 
+                    onClick={clearHistory}
+                    className="text-xs text-red-500 hover:underline"
+                >
+                    Clear History
+                </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {searchHistory.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleHistoryClick(item)}
+                  className="bg-gray-200 text-brand-brown px-3 py-1 rounded-full text-sm hover:bg-brand-light-green/50 transition-colors"
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
 
       <div className="bg-white p-6 rounded-lg shadow-md min-h-[300px]">
         {isLoading ? (

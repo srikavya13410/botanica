@@ -1,5 +1,6 @@
 
-import { GoogleGenAI, Type, Modality } from "@google/genai";
+import { GoogleGenAI, Type, Modality, Chat } from "@google/genai";
+import { User } from "../types";
 
 // Use process.env.API_KEY directly as per Gemini API guidelines.
 if (!process.env.API_KEY) {
@@ -195,4 +196,35 @@ export const getUnsafePlants = async (medicalCondition: string, searchQuery?: st
     });
 
     return JSON.parse(response.text);
+};
+
+export const startAIGuideChat = (user: User): Chat => {
+    const systemInstruction = `You are Botanica AI Guide, a friendly and expert gardening assistant.
+Your goal is to help the user with their gardening questions and guide them through the Botanica app.
+
+User Details:
+- Username: ${user.username}
+- Medical Condition: ${user.medicalCondition || 'Not specified'}
+
+Botanica App Features:
+- Dashboard: The main screen with an overview.
+- My Garden: Where users add and view their plants.
+- Reminders: To set watering or care notifications.
+- For You (Recommendations): Personalized plant suggestions.
+- Discover (Encyclopedia): A search tool for any botanical term or plant.
+- Warnings: Lists plants to be cautious about based on the user's condition.
+
+Your tasks:
+1.  Answer gardening questions (e.g., soil types, planting times, pest control). If the user asks for weather-related or seasonal advice, be sure to ask for their location first.
+2.  Guide the user on how to use the app's features. For example, if they ask "how to add a plant?", tell them to go to the "My Garden" tab.
+3.  Be conversational, encouraging, and clear in your responses. Keep answers concise and easy to understand.`;
+
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const chat: Chat = ai.chats.create({
+      model: 'gemini-2.5-flash',
+      config: {
+        systemInstruction: systemInstruction,
+      },
+    });
+    return chat;
 };

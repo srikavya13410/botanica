@@ -35,4 +35,9 @@ export interface UnsafePlant {
   reason: string;
 }
 
-export type AppView = 'dashboard' | 'myGarden' | 'reminders' | 'recommendations' | 'encyclopedia' | 'warnings';
+export interface ChatMessage {
+  role: 'user' | 'model';
+  text: string;
+}
+
+export type AppView = 'dashboard' | 'myGarden' | 'reminders' | 'recommendations' | 'encyclopedia' | 'warnings' | 'aiGuide';

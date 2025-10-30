@@ -19,7 +19,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeView, setActiveView }) => {
   const navItems: { view: AppView; label: string; icon: React.ReactElement }[] = [
     { view: 'dashboard', label: 'Home', icon: <HomeIcon /> },
     { view: 'myGarden', label: 'My Garden', icon: <GardenIcon /> },
-    { view: 'reminders', label: 'Reminders', icon: <ReminderIcon /> },
+    { view: 'aiGuide', label: 'Guide', icon: <GuideIcon /> },
     { view: 'recommendations', label: 'For You', icon: <RecommendIcon /> },
     { view: 'encyclopedia', label: 'Discover', icon: <BookIcon /> },
   ];
@@ -52,10 +52,11 @@ const GardenIcon = () => (
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10a4 4 0 014-4h10a4 4 0 014 4v10a2 2 0 01-2 2H5a2 2 0 01-2-2v-10zm1.75-5.25a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0v-1.5zM19.25 4.75a.75.75 0 00-1.5 0v1.5a.75.75 0 001.5 0v-1.5zM9 14l3-3 3 3m-6 0v4h6v-4" />
   </svg>
 );
-const ReminderIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
+const GuideIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+      <path d="M10 2a6 6 0 00-6 6c0 1.887.824 3.555 2.08 4.673.22.163.34.42.34.698V15a1 1 0 001 1h5a1 1 0 001-1v-1.629c0-.278.12-.535.34-.698A5.968 5.968 0 0016 8a6 6 0 00-6-6z" />
+      <path d="M10 18a1 1 0 001-1v-1a1 1 0 10-2 0v1a1 1 0 001 1z" />
+    </svg>
 );
 const RecommendIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

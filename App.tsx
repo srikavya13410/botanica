@@ -6,6 +6,7 @@ import Reminders from './components/Reminders';
 import Recommendations from './components/Recommendations';
 import Encyclopedia from './components/Encyclopedia';
 import Warnings from './components/Warnings';
+import AIGuide from './components/AIGuide';
 import BottomNav from './components/BottomNav';
 import { User, AppView, Plant, Reminder } from './types';
 
@@ -110,6 +111,8 @@ const App: React.FC = () => {
         return <Recommendations user={user} myPlants={myPlants} addPlantToGarden={addPlantToGarden} />;
       case 'warnings':
         return <Warnings user={user} />;
+      case 'aiGuide':
+        return <AIGuide user={user} />;
       case 'encyclopedia':
         return <Encyclopedia initialQuery={encyclopediaQuery} clearInitialQuery={() => setEncyclopediaQuery('')} />;
       default:
@@ -148,7 +151,7 @@ const App: React.FC = () => {
         </div>
       </header>
       
-      <main className="container mx-auto p-4 pb-20">
+      <main className="container mx-auto p-4 pb-24">
         {renderActiveView()}
       </main>
       

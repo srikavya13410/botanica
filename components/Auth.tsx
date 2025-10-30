@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { User } from '../types';
 
 interface AuthProps {
-  onAuthSuccess: (user: User) => void;
+  onAuthSuccess: (user: Omit<User, 'phoneNumber'> & { phoneNumber: string }) => void;
 }
 
 const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
@@ -36,11 +36,11 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
 
   const handleDetailsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username && medicalCondition) {
+    if (username) {
       setError('');
       onAuthSuccess({ phoneNumber, username, medicalCondition });
     } else {
-      setError('Please fill out all fields.');
+      setError('Please provide a username.');
     }
   };
 
