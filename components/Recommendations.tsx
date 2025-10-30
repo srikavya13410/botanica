@@ -112,8 +112,8 @@ const Recommendations: React.FC<RecommendationsProps> = ({ user, myPlants, addPl
       case 0:
         return (
           <div className="text-center space-y-4 animate-fade-in">
-            <h3 className="text-2xl font-semibold text-brand-green">Let's find plants that are right for you.</h3>
-            <p className="text-brand-brown">Based on your condition, we'll guide you to safe and beneficial plants. First, choose a plant type.</p>
+            <h3 className="text-2xl font-semibold text-brand-green">Let's find well-known plants that are right for you.</h3>
+            <p className="text-brand-brown">We'll suggest common and safe plants, cross-referencing them with your condition. First, choose a plant type.</p>
             <div className="flex flex-wrap justify-center gap-4 pt-4">
               {['Flower', 'Fruit', 'Leaf', 'Succulent', 'Herb'].map(type => (
                 <button key={type} onClick={() => handlePreferenceChange('type', type)} className={`px-6 py-3 rounded-lg text-lg font-semibold transition-all ${preferences.type === type ? 'bg-brand-green text-white shadow-lg' : 'bg-white text-brand-brown shadow-md hover:shadow-lg'}`}>{type}</button>

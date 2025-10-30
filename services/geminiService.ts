@@ -78,8 +78,10 @@ export const getFilteredRecommendations = async (medicalCondition: string, prefe
     - Flowering: ${preferences.flowering}
     - Size: ${preferences.size}
     
-    Recommend up to 5 plants that fit these criteria. Use common, easily recognizable names for the plants. For each plant, provide its name, lifespan, seasonal info, useful info, environment, watering frequency, and a detailed visual description for an image generation model ('imagePrompt').
-    Crucially, provide a safety verification. This includes a boolean 'isSafe' and a detailed 'safetyExplanation'. 'isSafe' should be 'true' only if the plant is broadly considered safe for the user's condition. 'safetyExplanation' must detail any potential risks (allergens, toxins, physical challenges like thorns) or confirm its safety. If there are known risks, 'isSafe' must be 'false'. Prioritize safety above all. In the 'usefulInfo' field, also briefly mention any specific benefits for a user with this condition (e.g., 'Its smooth leaves and sturdy stems make it easy to handle for those with joint pain.').`;
+    Recommend up to 5 plants that fit these criteria.
+    Crucially, the recommendations should be plants that are very common and well-known in India, or are globally recognized household plants (like Snake Plant, Spider Plant, etc.). Prioritize plants that an average person in India would likely recognize (e.g., Tulsi, Marigold, Aloe Vera).
+    For each plant, provide its name, lifespan, seasonal info, useful info, environment, watering frequency, and a detailed visual description for an image generation model ('imagePrompt').
+    The most important step is safety verification. Cross-verify each recommendation with the user's condition ("${medicalCondition}"). This includes a boolean 'isSafe' and a detailed 'safetyExplanation'. 'isSafe' must be 'true' only if the plant is broadly considered safe for the user's condition. 'safetyExplanation' must detail any potential risks (allergens, toxins, physical challenges like thorns) or confirm its safety. If there are known risks, 'isSafe' must be 'false'. Prioritize safety above all. In the 'usefulInfo' field, also briefly mention any specific benefits for a user with this condition (e.g., 'Its smooth leaves and sturdy stems make it easy to handle for those with joint pain.').`;
 
     const response = await ai.models.generateContent({
         model: 'gemini-2.5-pro',
