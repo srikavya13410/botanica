@@ -10,6 +10,19 @@ interface MyGardenProps {
   onLearnMore: (plantName: string) => void;
 }
 
+const exampleRose: Plant = {
+  id: 'example-rose',
+  name: 'Hybrid Tea Rose',
+  nickname: 'My First Rose (Example)',
+  lifeSpan: 'Perennial (many years)',
+  seasonalInfo: 'Blooms from spring to fall.',
+  usefulInfo: 'Cultivated for its beauty and fragrance. Be mindful of thorns when handling.',
+  environment: 'Requires at least 6 hours of direct sunlight per day and well-draining soil.',
+  wateringFrequency: 'Water deeply 1-2 times a week, more in hot weather.',
+  imageUrl: 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1987&auto=format&fit=crop',
+};
+
+
 const MyGarden: React.FC<MyGardenProps> = ({ myPlants, addPlantToGarden, onLearnMore }) => {
   const [identifiedPlant, setIdentifiedPlant] = useState<Plant | null>(null);
   const [nickname, setNickname] = useState('');
@@ -143,13 +156,19 @@ const MyGarden: React.FC<MyGardenProps> = ({ myPlants, addPlantToGarden, onLearn
       <div>
         <h2 className="text-3xl font-bold text-brand-brown mb-4">Your Garden</h2>
         {myPlants.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="space-y-8">
             {myPlants.map(plant => (
-              <PlantCard key={plant.id} plant={plant} onLearnMore={onLearnMore} />
+              <PlantCard key={plant.id} plant={plant} onLearnMore={onLearnMore} displayMode="list" />
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-10 bg-gray-50 rounded-lg">Your garden is empty. Add a plant to get started!</p>
+          <div className="text-center text-gray-500 py-10 px-4 bg-gray-50 rounded-lg">
+            <p className="mb-4">Your garden is empty. Here's an example of how your plants will look!</p>
+            <div className="text-left w-full max-w-4xl mx-auto">
+                 <PlantCard plant={exampleRose} onLearnMore={onLearnMore} displayMode="list" />
+            </div>
+            <p className="mt-6 font-semibold">Click the photo above to see it in full screen.</p>
+          </div>
         )}
       </div>
     </div>
