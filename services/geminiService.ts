@@ -77,8 +77,8 @@ export const getFilteredRecommendations = async (medicalCondition: string, prefe
     - Flowering: ${preferences.flowering}
     - Size: ${preferences.size}
     
-    Recommend up to 5 plants that fit these criteria. For each plant, provide its name, lifespan, seasonal info, useful info, environment, watering frequency, and a detailed visual description for an image generation model ('imagePrompt').
-    Crucially, provide a safety verification. This includes a boolean 'isSafe' and a detailed 'safetyExplanation'. 'isSafe' should be 'true' only if the plant is broadly considered safe for the user's condition. 'safetyExplanation' must detail any potential risks (allergens, toxins, physical challenges like thorns) or confirm its safety. If there are known risks, 'isSafe' must be 'false'. Prioritize safety above all.`;
+    Recommend up to 5 plants that fit these criteria. Use common, easily recognizable names for the plants. For each plant, provide its name, lifespan, seasonal info, useful info, environment, watering frequency, and a detailed visual description for an image generation model ('imagePrompt').
+    Crucially, provide a safety verification. This includes a boolean 'isSafe' and a detailed 'safetyExplanation'. 'isSafe' should be 'true' only if the plant is broadly considered safe for the user's condition. 'safetyExplanation' must detail any potential risks (allergens, toxins, physical challenges like thorns) or confirm its safety. If there are known risks, 'isSafe' must be 'false'. Prioritize safety above all. In the 'usefulInfo' field, also briefly mention any specific benefits for a user with this condition (e.g., 'Its smooth leaves and sturdy stems make it easy to handle for those with joint pain.').`;
 
     const response = await ai.models.generateContent({
         model: 'gemini-2.5-pro',
@@ -165,4 +165,34 @@ export const getHealthTip = async (medicalCondition: string) => {
     });
 
     return response.text;
+};
+
+export const getUnsafePlants = async (medicalCondition: string, searchQuery?: string) => {
+    const prompt = `You are a toxicologist and botanist specializing in plant safety for individuals with medical conditions. A user with "${medicalCondition}" is asking for a list of plants they should avoid worldwide. ${searchQuery ? `The user is specifically searching for "${searchQuery}", so filter the list to plants matching that term.` : ''} For each plant, provide its primary common name, an array of other common names, and a detailed but easy-to-understand reason why it is unsafe for someone with their condition (e.g., allergenic pollen, toxic if ingested, sharp thorns posing a risk for those with mobility issues, etc.). Provide a comprehensive list if no search query is given.`;
+
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.5-pro',
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: Type.ARRAY,
+                items: {
+                    type: Type.OBJECT,
+                    properties: {
+                        name: { type: Type.STRING, description: "The primary common name of the unsafe plant." },
+                        commonNames: {
+                            type: Type.ARRAY,
+                            items: { type: Type.STRING },
+                            description: "An array of other common names for the plant."
+                        },
+                        reason: { type: Type.STRING, description: "A detailed explanation of why the plant is unsafe for the specified medical condition." },
+                    },
+                    required: ["name", "commonNames", "reason"]
+                }
+            }
+        }
+    });
+
+    return JSON.parse(response.text);
 };

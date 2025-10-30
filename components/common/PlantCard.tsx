@@ -26,8 +26,8 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onAdd, showAddButton = fal
   if (displayMode === 'list') {
     return (
       <>
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 flex flex-col sm:flex-row">
-          <div className="relative w-full sm:w-1/3 h-64 sm:h-auto bg-gray-100">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 flex flex-col">
+          <div className="relative w-full h-80 bg-gray-100">
             {plant.isLoadingImage ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <Spinner />
@@ -36,7 +36,7 @@ const PlantCard: React.FC<PlantCardProps> = ({ plant, onAdd, showAddButton = fal
               plant.imageUrl && <img src={plant.imageUrl} alt={plant.name} className="w-full h-full object-cover cursor-pointer" onClick={() => setIsModalOpen(true)} />
             )}
           </div>
-          <div className="p-6 flex flex-col sm:w-2/3">
+          <div className="p-6 flex flex-col">
             {plant.nickname ? (
                 <>
                     <h3 className="text-2xl font-bold text-brand-green">{plant.nickname}</h3>

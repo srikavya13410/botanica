@@ -29,4 +29,10 @@ export interface Reminder {
   plantName?: string;
 }
 
-export type AppView = 'dashboard' | 'myGarden' | 'reminders' | 'recommendations' | 'encyclopedia';
+export interface UnsafePlant {
+  name: string;
+  commonNames: string[];
+  reason: string;
+}
+
+export type AppView = 'dashboard' | 'myGarden' | 'reminders' | 'recommendations' | 'encyclopedia' | 'warnings';

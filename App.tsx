@@ -5,6 +5,7 @@ import MyGarden from './components/MyGarden';
 import Reminders from './components/Reminders';
 import Recommendations from './components/Recommendations';
 import Encyclopedia from './components/Encyclopedia';
+import Warnings from './components/Warnings';
 import BottomNav from './components/BottomNav';
 import { User, AppView, Plant, Reminder } from './types';
 
@@ -107,6 +108,8 @@ const App: React.FC = () => {
         return <Reminders myPlants={myPlants} reminders={reminders} addReminder={addReminder} deleteReminder={deleteReminder} />;
       case 'recommendations':
         return <Recommendations user={user} myPlants={myPlants} addPlantToGarden={addPlantToGarden} />;
+      case 'warnings':
+        return <Warnings user={user} />;
       case 'encyclopedia':
         return <Encyclopedia initialQuery={encyclopediaQuery} clearInitialQuery={() => setEncyclopediaQuery('')} />;
       default:

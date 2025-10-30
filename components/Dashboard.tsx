@@ -24,6 +24,11 @@ const GardenIcon = () => (
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
     </svg>
   );
+const WarningIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+  </svg>
+);
 
 
 interface DashboardProps {
@@ -88,10 +93,11 @@ const Dashboard: React.FC<DashboardProps> = ({ user, myPlants, reminders, setAct
 
       <div className="bg-white p-4 rounded-2xl shadow-md mx-4">
         <h3 className="text-lg font-semibold text-brand-brown mb-4 px-2">Quick Actions</h3>
-        <div className="grid grid-cols-4 gap-2 text-white">
+        <div className="grid grid-cols-3 gap-y-4 gap-x-2 text-white">
             <QuickActionButton icon={<GardenIcon />} label="My Garden" onClick={() => setActiveView('myGarden')} color="bg-green-400" />
             <QuickActionButton icon={<RecommendIcon />} label="For You" onClick={() => setActiveView('recommendations')} color="bg-pink-400" />
             <QuickActionButton icon={<ReminderIcon />} label="Reminders" onClick={() => setActiveView('reminders')} color="bg-blue-400" />
+            <QuickActionButton icon={<WarningIcon />} label="Warnings" onClick={() => setActiveView('warnings')} color="bg-red-500" />
             <QuickActionButton icon={<BookIcon />} label="Discover" onClick={() => setActiveView('encyclopedia')} color="bg-yellow-500" />
         </div>
       </div>
